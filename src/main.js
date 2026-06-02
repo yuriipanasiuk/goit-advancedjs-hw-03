@@ -17,12 +17,9 @@ const onSearchImage = e => {
   showLoader();
 
   getImagesByQuery(query)
-    .then(response => {
-      const data = response.data;
-
-      if (data.hits.length === 0) {
-        iziToast.show({
-          backgroundColor: 'red',
+    .then(({ hits }) => {
+      if (hits.length === 0) {
+        iziToast.error({
           message: 'Sorry, there are no images matching your search query. Please try again!',
         });
 
@@ -30,12 +27,11 @@ const onSearchImage = e => {
         return;
       }
 
-      createGallery(data.hits);
+      createGallery(hits);
       e.target.reset();
     })
     .catch(() =>
-      iziToast.show({
-        backgroundColor: '#EF4040',
+      iziToast.error({
         message: 'Something went wrong!',
       })
     )
